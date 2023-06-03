@@ -1,0 +1,56 @@
+stages:
+  - build
+  - deploy
+  - cleanup
+
+docker-build-dev:
+  rules:
+    - if: $CI_BUILD_REF_NAME == "dev"
+      when: on_success
+    - when: never
+  stage: build
+  interruptible: true
+  script:
+    - docker build . -t $CI_PROJECT_NAME-dev:latest --build-arg NEXT_PUBLIC_BACK_URL=https://api.metrica-agency.ru
+
+docker-build-prod:
+  rules:
+    - if: $CI_BUILD_REF_NAME == "master"
+      when: on_success
+    - when: never
+  stage: build
+  interruptible: true
+  script:
+    - docker build . -t $CI_PROJECT_NAME-prod:latest --build-arg NEXT_PUBLIC_BACK_URL=https://api.metrica-agency.ru
+
+restart-dev:
+  rules:
+    - if: $CI_BUILD_REF_NAME == "dev"
+      when: on_success
+    - when: never
+  stage: deploy
+  interruptible: true
+  script:
+    - cd ~/$CI_PROJECT_NAME-dev/
+    - docker-compose up -d
+
+restart-prod:
+  rules:
+    - if: $CI_BUILD_REF_NAME == "master"
+      when: on_success
+    - when: never
+  stage: deploy
+  interruptible: true
+  script:
+    - cd ~/$CI_PROJECT_NAME-prod/
+    - docker-compose up -d
+
+cleanup:
+  rules:
+    - if: $CI_BUILD_REF_NAME == "master" || $CI_BUILD_REF_NAME == "dev"
+      when: on_success
+    - when: never
+  interruptible: true
+  stage: cleanup
+  script:
+    - docker rmi --force $(docker images -q --filter "dangling=true") || echo test

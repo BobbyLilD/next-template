@@ -1,0 +1,13 @@
+services:
+  front-dev:
+    restart: unless-stopped
+    image: metrica-agency-front-dev:latest
+
+  front-prod:
+    restart: unless-stopped
+    image: metrica-agency-front-prod:latest
+
+networks:
+  default:
+    external: true
+    name: z-net

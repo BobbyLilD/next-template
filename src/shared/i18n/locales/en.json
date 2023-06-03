@@ -1,0 +1,10 @@
+{
+    "welcome": {
+        "title": "hello world",
+        "link": "go to second page"
+    },
+    "second-page":{
+        "title":"second page",
+        "link":"return to main page"
+    }
+}
