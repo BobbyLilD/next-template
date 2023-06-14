@@ -1,7 +1,6 @@
 import { API } from "@/shared/api";
 import { makeAutoObservable } from "mobx";
 import { CONSTANTS, LangTypes } from "@/shared/utils/constants";
-import UtilsENVConfig from "@/shared/utils/utils-env-config";
 
 class AppStore {
   isInit: boolean = false;
