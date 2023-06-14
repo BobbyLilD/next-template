@@ -12,7 +12,6 @@ class AppStore {
   }
 
   async initApp() {
-    console.log("ENV =", UtilsENVConfig.getProcessEnv());
     API.setHost(CONSTANTS.API_V1);
 
     API.setHeadersGetter(async () => {
